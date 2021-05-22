@@ -27,6 +27,41 @@ char server_path[PATH_MAX];
 char id_now[1024];
 char pass_now[1024];
 
+int create_tcp_server_socket(){
+	struct sockaddr_in saddr;
+	int fd, ret_val;
+
+	// Step1: create a TCP socket
+	server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if(fd == -1){
+		fprintf(stderr, "socket failed [%s]\n", strerror(errno));
+		return -1;
+	}
+	printf("Created a socket with fd: %d\n", fd);
+
+	// Initialize the socket address structure
+	saadr.sin_family = AF_INET;
+	saddr.sin_port = htons(7000);
+	saddr.sin_addr.s_addr = INADDR_ANY;
+
+	// Step2: bind the socket to port 7000 in the local host
+	ret_val = bind(fd, (struct sockaddr *)&saddr, sizeof(struct sockaddr_in));
+	if(ret_val != 0){
+		fprintf(stderr, "bind failed [%s]\n", strerror(errno));
+		close(fd)
+		return -1;
+	}
+
+	// Step3: listen for incoming connections
+	ret_val = listen(fd,5);
+	if(ret_val != 0){
+		fprintf(stderr, "listen failed [%s]\n", stderror(errno));
+		close(fd)
+		return -1
+	}
+	return fd;
+}
+
 void init_server()
 {
 	FILE *fp0 = fopen("files.tsv", "a+");
@@ -168,6 +203,7 @@ void take_filename(char filepath[], char filename[])
 	strcpy(filename, str);
 }
 
+// Revisi: Pakai socket
 void copy_file(char filepath[])
 {
 	char cf[1024], filename[1024];
@@ -216,7 +252,7 @@ void save_to_tsv(char publisher[], char tahun[], char filepath[])
 	fclose(fp);
 }
 
-void add_file()
+void add_command()
 {
 	char *pub = "Publisher :";
 	send_to_client(pub);
@@ -257,46 +293,10 @@ void take_ekstensi(char filename[], char ekstensi[])
 
 void get_deskripsi(char deskripsi[], char isi[])
 {
-	char *check, filepath[1024], publisher[1024], tahun[1024];
-	check = strtok(isi, "\t");
-	strcpy(filepath, check);
-	check = strtok(NULL, "\t");
-	strcpy(publisher, check);
-	check = strtok(NULL, "\t");
-	strcpy(tahun, check);
-
-	// Nama file
-	strcat(deskripsi, "Nama: ");
-	char filename[1024], cf[1024];
-	strcpy(cf, filepath);
-	take_filename(cf, filename);
-	strcat(deskripsi, filename);
-	strcat(deskripsi, "\n");
-
-	// Publisher
-	strcat(deskripsi, "Publisher: ");
-	strcat(deskripsi, publisher);
-	strcat(deskripsi, "\n");
-
-	// Tahun
-	strcat(deskripsi, "Tahun Publishing: ");
-	strcat(deskripsi, tahun);
-
-	// Ekstensi File
-	strcat(deskripsi, "Ekstensi File: ");
-	char cn[1024], ekstensi[1024];
-	strcpy(cn, filename);
-	take_ekstensi(cn, ekstensi);
-	strcat(deskripsi, ekstensi);
-	strcat(deskripsi, "\n");
-
-	// Filepath
-	strcat(deskripsi, "Filepath :");
-	strcat(deskripsi, filepath);
-	strcat(deskripsi, "\n\n");
+	
 }
 
-void see_file()
+void see_command()
 {
 	FILE *fp = fopen("files.tsv", "r");
 	char isi[1024], deskripsi_total[1024];
@@ -311,43 +311,12 @@ void see_file()
 	send_to_client(deskripsi_total);
 }
 
+// Revisi: multiple clients
 int main()
 {
 	init_server();
 
-	// Inititalize server side socket
-	if((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-	{
-		perror("Socket Failed");
-		exit(EXIT_FAILURE);
-	}
-
-	if(setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
-	{
-		perror("setsockopt");
-		exit(EXIT_FAILURE);
-	}
-
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons( PORT );
-
-	if(bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
-	{
-		perror("bind failed");
-		exit(EXIT_FAILURE);
-	}
-
-	if(listen(server_fd, 2) < 0){
-		perror("listen");
-		exit(EXIT_FAILURE);
-	}
-
-	if((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0)
-	{
-		perror("accept");
-		exit(EXIT_FAILURE);
-	}
+	server_fd = create_tcp_server_socket
 
 	// Send welcome message
 	send_to_client(welcome);
@@ -399,16 +368,17 @@ int main()
 			if(strcmp(command, "add") == 0)
 			{
 				printf("Adding file\n");
-				add_file();
+				add_command();
 			}
+			// Revisi : see, download, delete
 			else if(strcmp(command, "see") == 0) 
 			{
 				printf("User sees the files\n");
-				see_file();
+				see_command();
 			}
 			else
 			{
-
+				status = true;
 			}
 		}
 	}
