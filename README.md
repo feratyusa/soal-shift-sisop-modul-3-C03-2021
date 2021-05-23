@@ -156,5 +156,9 @@ Dalam memahami bagaimana `socket` dengan mengimplementasikan `select` cukup memb
 ### 2a
 ### 2b
 ### 2c
-### kendala
+Menggunakan pipeline, pipe output dari `ps` ke STDIN `sort`, pipe output `sort` ke STDIN `head`, yang head outputnya tidak usah dipipe supaya terlihat output dari `head`.
+### Kendala
+Debugging shared memory yang tersangkut dan penuh sangat menyenangkan `:)`. Akhirnya dilakukan menggunakan `ipcs -m`, lalu diclear manual jika terjadi stuck di antara `soal2a` dan `soal2b`.
+![image](https://user-images.githubusercontent.com/40772378/119259193-4ababb80-bbf7-11eb-844d-c2eca6c6992f.png)
+
 ## Nomor 3
