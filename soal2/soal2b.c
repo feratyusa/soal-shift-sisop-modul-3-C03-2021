@@ -8,8 +8,11 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
+#include <pthread.h>
 
 #define sem_name "/sisopTugas"
+
+pthread_t fact_func_do[4][6];
 
 typedef struct matrices
 {
@@ -52,24 +55,27 @@ void input_max_fact_matrice(matrices_t *m)
     }}
 }
 
-void calc_fact(matrices_t *m)
+void* calc_fact(void *mp)
 {
     int i, j;
 
+    matrices_t *m = (matrices_t*) mp;
     printf("--- MATRIKS AKHIR (4x6) ---\n");
+    pthread_t id=pthread_self();
     for (i = 0; i < 4; ++i) {
     for (j = 0; j < 6; ++j) {
-        if (m->result[i][j] == 0 &&  m->max_fact[i][j] == 0) {
-            m->result_fact[i][j] = 0;
-        } else if (m->result[i][j] >= m->max_fact[i][j]) {
-            m->result_fact[i][j] = fact(m->result[i][j], (m->result[i][j] - m->max_fact[i][j]));
+        if (pthread_equal(id,fact_func_do[i][j])) {
+            if (m->result[i][j] == 0 &&  m->max_fact[i][j] == 0) {
+                m->result_fact[i][j] = 0;
+            } else if (m->result[i][j] >= m->max_fact[i][j]) {
+                m->result_fact[i][j] = fact(m->result[i][j], (m->result[i][j] - m->max_fact[i][j]));
+            } else {
+                m->result_fact[i][j] = fact(m->result[i][j], 1);
+            }
         } else {
-            m->result_fact[i][j] = fact(m->result[i][j], 1);
+            continue;
         }
-
-        printf("%llu ", m->result_fact[i][j]);
     }
-        printf("\n");
     }
 }
 
@@ -122,8 +128,21 @@ int main(int argc, char* argv[])
 
     input_max_fact_matrice(m);
     printf("\n");
-    calc_fact(m);
+    for (i = 0; i < 4; ++i) {
+    for (j = 0; j < 6; ++j) {
+        pthread_create(&(fact_func_do[i][j]),NULL,&calc_fact,(void*)m);
+    }}
+    for (i = 0; i < 4; ++i) {
+    for (j = 0; j < 6; ++j) {
+        pthread_join(fact_func_do[i][j],NULL);
+    }}
 
+    for (i = 0; i < 4; ++i) {
+    for (j = 0; j < 6; ++j) {
+        printf("%llu ", m->result_fact[i][j]);
+    }
+        printf("\n");
+    }
     shmdt(m);
     shmctl(shmid, IPC_RMID, NULL);
     return 0;

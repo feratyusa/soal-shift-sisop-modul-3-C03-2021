@@ -42,12 +42,14 @@ void input_matrice(matrices_t *m)
     for (i = 0; i < 4; ++i) {
     for (j = 0; j < 3; ++j) {
         scanf("%d", &(m->multiplicand[i][j]));
+        // m->multiplicand[i][j] = (j > 2)? j - 2 : j + 1;
     }}
 
     printf("--- INPUT MATRIKS MULTIPLIER (3x6) ---\n");
     for (i = 0; i < 3; ++i) {
     for (j = 0; j < 6; ++j) {
         scanf("%d", &(m->multiplier[i][j]));
+        // m->multiplier[i][j] = (j > 2)? j - 2 : j + 1;
     }}
 }
 
