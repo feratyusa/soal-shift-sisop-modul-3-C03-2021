@@ -155,10 +155,19 @@ Dalam memahami bagaimana `socket` dengan mengimplementasikan `select` cukup memb
 ## Nomor 2
 ### 2a
 Program menerima argumen direktori yang akan dijadikan patokan untuk alokasi shared memory, shared memory lalu dialokasikan untuk struct `matrices_t`. Setelah alokasi, adalah input matriks dan perkalian matriks menggunakan algoritma perkalian matriks biasa `(sebab bukan CP, jadi tenang saja)`. Yang mungkin agak berbeda dari program lain adalah adanya semaphore di bagian ini, supaya nomor 2b tidak mengakses shared memory sebelum 2a selesai.
+![image](https://user-images.githubusercontent.com/40772378/119262255-c2dbae00-bc04-11eb-8853-634a5fd8bfa7.png)
+
+
 ### 2b
 Program menerima argumen direktori yang akan dijadikan patokan untuk alokasi shared memory, shared memory lalu diambil addressnya. Setelah diambil, akan diterima hasil perkalian matriks, lalu akan ada inputan untuk matriks pembatas faktorial. Fungsi hitung faktorial matriks dijalankan dengan pemanggilan thread sebanyak cell yang ada. Setelah selesai, matriks akhir akan ditampilkan.
+![image](https://user-images.githubusercontent.com/40772378/119262281-da1a9b80-bc04-11eb-89df-cef165c72629.png)
+
+
 ### 2c
 Menggunakan pipeline, pipe output dari `ps` ke STDIN `sort`, pipe output `sort` ke STDIN `head`, yang head outputnya tidak usah dipipe supaya terlihat output dari `head`.
+![image](https://user-images.githubusercontent.com/40772378/119262287-e43c9a00-bc04-11eb-85ec-ef9dcd53264d.png)
+
+
 ### Kendala
 Debugging shared memory yang tersangkut dan penuh sangat menyenangkan `:)`. Akhirnya dilakukan menggunakan `ipcs -m`, lalu diclear manual jika terjadi stuck di antara `soal2a` dan `soal2b`.
 ![image](https://user-images.githubusercontent.com/40772378/119259193-4ababb80-bbf7-11eb-844d-c2eca6c6992f.png)
