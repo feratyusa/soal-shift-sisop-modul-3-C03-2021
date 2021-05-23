@@ -153,4 +153,8 @@ Dalam memahami bagaimana `socket` dengan mengimplementasikan `select` cukup memb
 |_Tampak Task Manager_|
 
 ## Nomor 2
+### 2a
+### 2b
+### 2c
+### kendala
 ## Nomor 3
