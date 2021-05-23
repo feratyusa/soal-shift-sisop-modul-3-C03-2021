@@ -293,12 +293,6 @@ int main () {
                             else if(strcmp(buf, DELETE)==0){
                                 delete_file(all_connections[i]);
                             }
-                        	else{
-                        		printf("Someone came in to the app fd: %d\n", all_connections[i]);
-                        		printf("Data came in: %s\n", buf);
-                        		fill_buff("\nYour message was sent successfully\n");
-                        		ret_val = send(all_connections[i], buf, sizeof(buf), 0);
-                        	}
                         }
                     } 
                     if (ret_val == -1) {

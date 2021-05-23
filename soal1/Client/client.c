@@ -152,13 +152,6 @@ int main () {
                 delete_file();
             }
         }
-        /* Next step: send some data */
-        scanf("%s",message);
-        ret_val = send(fd, message, sizeof(message), 0);
-        printf("Successfully sent data: %s\n", message);
-        ret_val = recv(fd,message, sizeof(message), 0);
-        printf("%s\n", message);
-
     }
 
     /* Last step: close the socket */
