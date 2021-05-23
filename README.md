@@ -154,7 +154,9 @@ Dalam memahami bagaimana `socket` dengan mengimplementasikan `select` cukup memb
 
 ## Nomor 2
 ### 2a
+Program menerima argumen direktori yang akan dijadikan patokan untuk alokasi shared memory, shared memory lalu dialokasikan untuk struct `matrices_t`. Setelah alokasi, adalah input matriks dan perkalian matriks menggunakan algoritma perkalian matriks biasa `(sebab bukan CP, jadi tenang saja)`. Yang mungkin agak berbeda dari program lain adalah adanya semaphore di bagian ini, supaya nomor 2b tidak mengakses shared memory sebelum 2a selesai.
 ### 2b
+Program menerima argumen direktori yang akan dijadikan patokan untuk alokasi shared memory, shared memory lalu diambil addressnya. Setelah diambil, akan diterima hasil perkalian matriks, lalu akan ada inputan untuk matriks pembatas faktorial. Fungsi hitung faktorial matriks dijalankan dengan pemanggilan thread sebanyak cell yang ada. Setelah selesai, matriks akhir akan ditampilkan.
 ### 2c
 Menggunakan pipeline, pipe output dari `ps` ke STDIN `sort`, pipe output `sort` ke STDIN `head`, yang head outputnya tidak usah dipipe supaya terlihat output dari `head`.
 ### Kendala
