@@ -81,45 +81,45 @@ Pada soal ini diharuskan implementasi server client menggunakan multiconnection,
 ```
 Potongan di atas adalah modifikasi agar `Queueu` dapat diimplementasikan. Pertama pada _server.c_, saat client baru telah terhubung dengan server maka akan di-push ke dalam `Queue` lalu dicek jika `Queue` masih kosong maka yang dilayani sekarang adalah client tersebut. Jika ada client baru yang masuk akan di-push juga namun akan dikirim status kepada client bahwa server sedang digunakan, terlihat juga pada _client.c_ terdapat loop untuk menghentikan jalannya cliet sementara sampai server tersedia lagi.
 
-| (client1) | (client2) |
+| ![image](https://user-images.githubusercontent.com/68368240/119251748-5b0c6f80-bbd2-11eb-935d-257e622ebcca.png) | ![image](https://user-images.githubusercontent.com/68368240/119251773-81caa600-bbd2-11eb-80b9-639de6665330.png) |
 | --- | --- |
 | _client masuk_ | _client pending_ |
 
 Setelah melakukan registrasi, data id dan password yang digunakan akan di simpan di *akun.txt*. Dapat diselesaikan dengan sederhana menggunakan fungsi bawaan dari `C` untuk menghandle file. Saat login hanya perlu mengecek line-per-line apakah data id dan password yang digunakan sudah ada di *akun.txt*
 
-|(akun.txt)|
+|![image](https://user-images.githubusercontent.com/68368240/119251846-0289a200-bbd3-11eb-9ce4-322db7c201e6.png)|
 |---|
 |_akun.txt_|
 
 ### 1b
 Untuk memasukkan data kedalam *files.tsv* dapat menggunakan `\t` antar data yang ingin dimasukkan. Karena path yang akan disimpan adalah path asli menuju file yang nanti akan disimpan di folder `Server/FILES/`, maka pertama dapat menggunakan fungsi `realpath` untuk mengetahui path asli dari folder `Server/FILES/` setelah itu dapat menambahkan nama file yang ingin dimasukkan dengan menggunakan `strcat`.
 
-|(files.tsv)|
+|![image](https://user-images.githubusercontent.com/68368240/119251865-19c88f80-bbd3-11eb-899c-18e731a5eaf7.png)|
 |---|
 |_files.tsv_|
 
 ### 1c
 Folder `FILES` dapat dibuat dengan menggunkan fungsi `mkdir()`, memasukkan filenya dan memasukkan data ke dalam *files.tsv* setelah memanggil command *add* sama dengan cara yang telah dijealskan di nomor *1b*. Setelah menerima data publisher, tahun publikasi, dan filepathnya, juga akan dikirim content file dari client ke dalam server sehingga pada sisi server dapat membuat file yang sama persis.
 
-|(FILES)|
+|![image](https://user-images.githubusercontent.com/68368240/119251894-3a90e500-bbd3-11eb-8f1e-aef896aa51fa.png)|
 |---|
 |_Folder FILES_|
 
 ### 1d
 Melakukan download (command *download* diikuti nama file) dapat dilakukan sama dengan saat ingin menambahkan file ke dalam server. Dengan cara mengirim nama file dari client ke server, lalu server dapat mengirim content/isi dari file tersebut ke client jika ada.
 
-|(download)|
+|![image](https://user-images.githubusercontent.com/68368240/119251990-b0954c00-bbd3-11eb-8486-0106a7175b1e.png)|
 |---|
 |_hasil download inifile.txt_|
 
 ### 1e
 Menghapus file, command *delete* diikuti nama file, dapat dilakukan dengan pertama mengecek apakah ada filenya atau tidak sekaligus mengganti nama filenya menjadi *old-Namafile.ekstensi* menggunakan `rename`. Fungsi `rename` akan mengembalikan nilai 0 jika filenya ada, mengembalikan nilai -1 jika tidak ada. Jika ada, maka baris yang mengandung nama file yang ingin dihapus akan dihapus dari *files.tsv*. Jika tidak ada, akan mengirim pesan error ke sisi client.
 
-|(delete1)|
+|![image](https://user-images.githubusercontent.com/68368240/119252000-cc98ed80-bbd3-11eb-9e00-58813ac38a51.png)|
 |---|
 |_rename inifile.txt_|
 
-|(delete2)|
+|![image](https://user-images.githubusercontent.com/68368240/119252012-da4e7300-bbd3-11eb-8d69-1374b1da8fce.png)|
 |---|
 |_hapus inifile.txt pada files.tsv_|
 
@@ -127,28 +127,28 @@ Menghapus file, command *delete* diikuti nama file, dapat dilakukan dengan perta
 ### 1f
 Melihat semua isi file dapat dilakukan dengan melihat isi dari *files.tsv* lalu mengambil data yang perlu dan menyesuaikan format yang diberikan.
 
-|(see)|
+|![image](https://user-images.githubusercontent.com/68368240/119252018-ed614300-bbd3-11eb-8445-02f176eebe5f.png)|
 |---|
 |_command see_|
 
 ### 1g
 Mencari file juga dapat dilakukan dengan melihat isi dari *files.tsv* pada kolom pertama lalu mengambil namafile yang sesuai dengan argumen kedua yang diberikan menggunakan fungsi `strstr`.
 
-|(find)|
+|![image](https://user-images.githubusercontent.com/68368240/119252032-0833b780-bbd4-11eb-8cc6-001f0ecafa6b.png)|
 |---|
 |_find file_|
 
 ### 1h
 Kegiatan log dapat dilakukan dengan mempassing kegiatannya apakah *Tambah* atau *Hapus* lalu nama file yang dilakukan perubahan atau penambahan, dan terakhir akun yang masuk dapat diambil dengan cara pada saat login di sisi server langsung menyimpan id dan password yang telah login pada waktu itu.
 
-|(log)|
+|![image](https://user-images.githubusercontent.com/68368240/119252045-1681d380-bbd4-11eb-8d7d-aa30752d290f.png)|
 |---|
 |_isi running.log_|
 
 ### Kendala
 Dalam memahami bagaimana `socket` dengan mengimplementasikan `select` cukup membingungkan dan perlu mencari-cari di internet untuk referensi penggunaanya. Soal ini juga cukup panjang dari segi solusinya sehingga cukup bingung dan capek, but it's quite fun. Bisa jadi dari solusi saya yang belum terlalu teroptimasi. Yang cukup menghambat juga dari sisi eksternal adalah device yang dipakai terkadang menjadi lambat saat membuka VirtualBox, barangkali akhir semester dapat dilakukan servis.
 
-|(manager)|
+|![image](https://user-images.githubusercontent.com/68368240/119252077-5c3e9c00-bbd4-11eb-913a-170db3d106dc.png)|
 |---|
 |_Tampak Task Manager_|
 
